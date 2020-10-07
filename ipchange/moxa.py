@@ -1,5 +1,38 @@
 import requests
 import hashlib
+import lxml.html
+
+
+ascii = ('01234567890123456789012345678901 ' 
+         '!"#$%&\'()*+,-./0123456789:;<=>?@'
+         'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`'
+         'abcdefghijklmnopqrstuvwxyz{|}~')
+
+
+def xor_passwd(str1, str2, fill=False):
+    md = hashlib.md5(bytes(str1, 'ascii')).digest()
+    pw_tbl = [ascii.rindex(c) for c in str2]
+    result_tbl = [a ^ b for a, b in zip(md, pw_tbl)]
+
+    if fill:
+        new_result = list(md)
+    else:
+        new_result = [None] * len(str2)
+
+    for i in range(len(result_tbl)):
+        new_result[i] = result_tbl[i]
+
+    return ''.join('{:02x}'.format(a) for a in new_result)
+
+def get_fake_challenge(htmlstr):
+    htmltree = lxml.html.fromstring(htmlstr)
+
+    for el in htmltree.xpath('//input'):
+        name = el.attrib['name']
+        if name == 'FakeChallenge':
+            return el.attrib['value']
+
+    return None
 
 
 class MoxaHTTP_2_2:
@@ -16,22 +49,31 @@ class MoxaHTTP_2_2:
     def login(self, username='admin', password=''):
         """ Login to MOXA Web Interface"""
 
-        if password != '':
-            password = hashlib.md5(bytes(password, 'ascii')).hexdigest()
+        r = requests.get(self._base_url)
+        if r.status_code != 200:
+            raise RuntimeError('HTTP Login failed.')
+
+        fcr = get_fake_challenge(r.text)
+
+        if fcr is None:
+            raise RuntimeError("Error getting FakeChallengeResponse")
+
+        xorpw = xor_passwd(fcr, password)
 
         data = {
-            'Username': 'admin',
-            'Password': password,
-            'MD5Password': '',
-            'FakeChallenge': 5555,
+            'Username': username, 
+            'Password': '',
+            'MD5Password': xorpw,
+            'FakeChallenge': fcr,
             'Submit.x' : 0,
             'Submit.y' : 0
         }
 
         r = requests.post(self._base_url, data=data)
-
         if r.status_code != 200:
             raise RuntimeError('HTTP Login failed.')
+
+        self._cookies = r.cookies
 
         # Check by asking for main page again
 
@@ -67,6 +109,6 @@ class MoxaHTTP_2_2:
 
 
 if __name__ == "__main__":
-    m = MoxaHTTP_2_2('10.65.2.2')
-    m.login('admin', '')
-    m.set_ipaddr('10.65.2.3', '255.255.255.0', '')
+    m = MoxaHTTP_2_2('xf06bm-tsrv6')
+    m.login('admin', 'test')
+    #m.set_ipaddr('10.65.2.3', '255.255.255.0', '')
