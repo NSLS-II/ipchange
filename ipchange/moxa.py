@@ -3,7 +3,7 @@ import hashlib
 import lxml.html
 
 
-ascii = ('01234567890123456789012345678901 ' 
+ascii = ('01234567890123456789012345678901 '
          '!"#$%&\'()*+,-./0123456789:;<=>?@'
          'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`'
          'abcdefghijklmnopqrstuvwxyz{|}~')
@@ -24,6 +24,7 @@ def xor_passwd(str1, str2, fill=False):
 
     return ''.join('{:02x}'.format(a) for a in new_result)
 
+
 def get_fake_challenge(htmlstr):
     htmltree = lxml.html.fromstring(htmlstr)
 
@@ -39,7 +40,7 @@ class MoxaHTTP_2_2:
     def __init__(self, addr):
         """Initialize class for Moxa HTTP 2.2 Communication
 
-        addr : str 
+        addr : str
             Address of moxa to communicate with
         """
         self._addr = addr
@@ -61,12 +62,12 @@ class MoxaHTTP_2_2:
         xorpw = xor_passwd(fcr, password)
 
         data = {
-            'Username': username, 
+            'Username': username,
             'Password': '',
             'MD5Password': xorpw,
             'FakeChallenge': fcr,
-            'Submit.x' : 0,
-            'Submit.y' : 0
+            'Submit.x': 0,
+            'Submit.y': 0
         }
 
         r = requests.post(self._base_url, data=data)
@@ -85,25 +86,28 @@ class MoxaHTTP_2_2:
     def set_ipaddr(self, ipaddr, netmask, gateway):
         """Set the IP Address of the MOXA and restart
 
-        ipaddr : str 
+        ipaddr : str
             New IP Address
         netmask: str
-            New NETMASK 
+            New NETMASK
         gateway: str
             New Gateway
         """
 
         set_url = ("/Set.htm?IPConfig=0&IPaddr={}&Netmask={}&"
-                "Gateway={}&DNS1=&DNS2=&WINSDisable=0&WINSServer="
-                "&IP6Config=0&IPv6DNS1=&IPv6DNS2=&CONN_PRIORITY=0&"
-                "LAN1Speed=0&Submit=Submit&setfunc=Basic+Network")
+                   "Gateway={}&DNS1=&DNS2=&WINSDisable=0&WINSServer="
+                   "&IP6Config=0&IPv6DNS1=&IPv6DNS2=&CONN_PRIORITY=0&"
+                   "LAN1Speed=0&Submit=Submit&setfunc=Basic+Network")
         set_url = set_url.format(ipaddr, netmask, gateway)
 
         r = requests.get(self._base_url + set_url, cookies=self._cookies)
         if r.status_code != 200:
             raise RuntimeError('Failed to set IP Address, invalid response.')
 
-        r = requests.get(self._base_url + '/SaveRestart.htm', cookies=self._cookies) 
+        r = requests.get(
+            self._base_url + '/SaveRestart.htm',
+            cookies=self._cookies
+        )
         if r.status_code != 200:
             raise RuntimeError('Failed to restart MOXA, invalid response.')
 
@@ -111,4 +115,4 @@ class MoxaHTTP_2_2:
 if __name__ == "__main__":
     m = MoxaHTTP_2_2('xf06bm-tsrv6')
     m.login('admin', 'test')
-    #m.set_ipaddr('10.65.2.3', '255.255.255.0', '')
+    # m.set_ipaddr('10.65.2.3', '255.255.255.0', '')
