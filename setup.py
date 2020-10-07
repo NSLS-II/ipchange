@@ -41,7 +41,7 @@ setup(
     long_description=readme,
     author="Brookhaven National Lab",
     author_email='swilkins@bnl.gov',
-    url='https://github.com/stuwilkins/ipchange',
+    url='https://github.com/NSLS-II/ipchange',
     python_requires='>={}'.format('.'.join(str(n) for n in min_version)),
     packages=find_packages(exclude=['docs', 'tests']),
     entry_points={
