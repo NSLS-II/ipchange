@@ -14,7 +14,7 @@ license
 
 This software is licensed under a __3-clause BSD license__.
 
-See LICENSE.md_ for details.
+See LICENSE_ for details.
 
 
-.. _LICENSE.md : LICENSE.md
+.. _LICENSE : LICENSE
