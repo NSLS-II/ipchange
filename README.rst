@@ -2,11 +2,16 @@
 ipchange
 ========
 
-IP Change Scripts for NSLS-II Devices
+IP Change Scripts for NSLS-II Devices.
 
-* Free software: 3-clause BSD license
+This collection of utilities provides command line utilities and python modules for changing the ipaddress's and passwords for:
 
-Features
---------
+* Moxa Terminal Servers
+* AXIS Webcams
 
-* TODO
+license
+-------
+
+This software is licensed under a _3-clause BSD license_.
+
+See (LICENSE.md) for details
