@@ -46,8 +46,9 @@ setup(
     packages=find_packages(exclude=['docs', 'tests']),
     entry_points={
         'console_scripts': [
-            'moxa_changeip = ipchange.moxa.cmd:moxa_changeip',
-            'axis_changeip = ipchange.axis.cmd:axis_changeip',
+            'moxa_change_ip = ipchange.moxa.cmd:moxa_change_ip',
+            'moxa_change_pwd = ipchange.moxa.cmd:moxa_change_pwd',
+            'axis_change_ip = ipchange.axis.cmd:axis_change_ip',
         ],
     },
     include_package_data=True,

@@ -5,7 +5,7 @@ import ipaddress
 import ipchange.moxa
 
 
-def moxa_changeip():
+def moxa_change_ip():
 
     parser = argparse.ArgumentParser(
         prog=os.path.basename(sys.argv[0]),
