@@ -38,18 +38,25 @@ def moxa_changeip():
 
     parser.add_argument(
         '-u', '--username', dest='username', action='store',
-        help='Username of the MOXA to connect to'
+        help='Username of the MOXA to connect to',
+        default=None
     )
 
     parser.add_argument(
         '-p', '--password', dest='password', action='store',
-        help='Password of the MOXA to connect to'
+        help='Password of the MOXA to connect to',
+        defalt=None
     )
 
     args = vars(parser.parse_args())
 
     moxa = ipchange.moxa.MoxaHTTP_2_2(
-        args['MOXA address/hostname']
+        args['MOXA address/hostname'],
+    )
+
+    moxa.login(
+        username=args['username'],
+        password=args['password']
     )
 
     moxa.set_ipaddr(
