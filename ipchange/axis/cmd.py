@@ -38,12 +38,14 @@ def axis_changeip():
 
     parser.add_argument(
         '-u', '--username', dest='username', action='store',
-        help='Username of the AXIS Webcam to connect to'
+        help='Username of the AXIS Webcam to connect to',
+        default=None
     )
 
     parser.add_argument(
         '-p', '--password', dest='password', action='store',
-        help='Password of the AXIS Webcam to connect to'
+        help='Password of the AXIS Webcam to connect to',
+        default=None
     )
 
     args = vars(parser.parse_args())
@@ -51,7 +53,9 @@ def axis_changeip():
     # Now run the set routine
 
     axis = ipchange.axis.AxisWebcam(
-        args['AXIS Webcam address/hostname']
+        args['AXIS Webcam address/hostname'],
+        username=args['username'],
+        password=args['password']
     )
 
     axis.set_ipaddr(
