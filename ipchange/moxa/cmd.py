@@ -45,7 +45,7 @@ def moxa_changeip():
     parser.add_argument(
         '-p', '--password', dest='password', action='store',
         help='Password of the MOXA to connect to',
-        defalt=None
+        default=None
     )
 
     args = vars(parser.parse_args())
