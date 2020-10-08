@@ -4,6 +4,7 @@ import sys
 import ipaddress
 import ipchange.moxa
 
+
 def moxa_base_argparser(description):
     parser = argparse.ArgumentParser(
         prog=os.path.basename(sys.argv[0]),
@@ -29,6 +30,7 @@ def moxa_base_argparser(description):
     )
 
     return parser
+
 
 def moxa_change_ip():
     parser = moxa_base_argparser('Change IP Addresses of MOXA Terminal Server')

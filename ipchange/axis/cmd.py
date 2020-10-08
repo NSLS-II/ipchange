@@ -5,11 +5,10 @@ import ipaddress
 import ipchange.moxa
 
 
-def axis_change_ip():
-
+def axis_base_argparser(description):
     parser = argparse.ArgumentParser(
         prog=os.path.basename(sys.argv[0]),
-        description='Change IP Addresses of AXIS Webcam'
+        description=description
     )
 
     parser.add_argument(
@@ -17,6 +16,24 @@ def axis_change_ip():
         metavar='host', type=str,
         help='Address or Hostname of the AXIS Webcam to change'
     )
+
+    parser.add_argument(
+        '-u', '--username', dest='username', action='store',
+        help='Username of the AXIS Webcam to connect to',
+        default=None
+    )
+
+    parser.add_argument(
+        '-p', '--password', dest='password', action='store',
+        help='Password of the AXIS Webcam to connect to',
+        default=None
+    )
+
+    return parser
+
+
+def axis_change_ip():
+    parser = axis_base_argparser('Change IP Addresses of AXIS Webcam')
 
     parser.add_argument(
         'New IP Address',
@@ -34,18 +51,6 @@ def axis_change_ip():
         'New Gateway',
         metavar='gateway', type=ipaddress.ip_address,
         help='New Gateway'
-    )
-
-    parser.add_argument(
-        '-u', '--username', dest='username', action='store',
-        help='Username of the AXIS Webcam to connect to',
-        default=None
-    )
-
-    parser.add_argument(
-        '-p', '--password', dest='password', action='store',
-        help='Password of the AXIS Webcam to connect to',
-        default=None
     )
 
     args = vars(parser.parse_args())
@@ -69,16 +74,7 @@ def axis_change_ip():
 
 def axis_change_passwd():
 
-    parser = argparse.ArgumentParser(
-        prog=os.path.basename(sys.argv[0]),
-        description='Change Password of AXIS Webcam'
-    )
-
-    parser.add_argument(
-        'AXIS Webcam address/hostname',
-        metavar='host', type=str,
-        help='Address or Hostname of the AXIS Webcam to change'
-    )
+    parser = axis_base_argparser('Change Password of AXIS Webcam')
 
     parser.add_argument(
         'Username to change',
@@ -90,18 +86,6 @@ def axis_change_passwd():
         'Password to change',
         metavar='host', type=str,
         help='New password for given user'
-    )
-
-    parser.add_argument(
-        '-u', '--username', dest='username', action='store',
-        help='Username of the AXIS Webcam to connect to',
-        default=None
-    )
-
-    parser.add_argument(
-        '-p', '--password', dest='password', action='store',
-        help='Password of the AXIS Webcam to connect to',
-        default=None
     )
 
     args = vars(parser.parse_args())

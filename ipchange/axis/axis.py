@@ -5,7 +5,7 @@ from requests.auth import HTTPDigestAuth
 
 
 class AxisWebcam:
-    def __init__(self, ipaddr, username='root', password='pass'):
+    def __init__(self, ipaddr, username=None, password=None):
         """Initialize AxisWebcam Object
 
         ipaddr : str
@@ -15,6 +15,11 @@ class AxisWebcam:
         password : str
             Password of Axis Webcam
         """
+
+        if username is None:
+            username = 'root'
+        if password is None:
+            password = 'pass'
 
         self._base_url = 'http://{}'.format(ipaddr)
         self._auth = HTTPDigestAuth(username, password)
