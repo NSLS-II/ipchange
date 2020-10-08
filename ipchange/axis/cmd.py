@@ -67,7 +67,7 @@ def axis_change_ip():
     return 0
 
 
-def axis_change_pwd():
+def axis_change_passwd():
 
     parser = argparse.ArgumentParser(
         prog=os.path.basename(sys.argv[0]),
@@ -116,7 +116,7 @@ def axis_change_pwd():
 
     axis.change_passwd(
         username=args['Username to change'],
-        password=args['password to change']
+        password=args['Password to change']
     )
 
     return 0
