@@ -81,15 +81,15 @@ def axis_change_pwd():
     )
 
     parser.add_argument(
-        'Username to change'
+        'Username to change',
         metavar='username', type=str,
         help='Username of the user to change password for'
     )
 
     parser.add_argument(
-        'Password to change'
+        'Password to change',
         metavar='host', type=str,
-        help='New password for given user"
+        help='New password for given user'
     )
 
     parser.add_argument(
@@ -115,8 +115,8 @@ def axis_change_pwd():
     )
 
     axis.change_passwd(
-        username=args['Username to change']),
-        password=args['password to change'])
+        username=args['Username to change'],
+        password=args['password to change']
     )
 
     return 0
