@@ -47,8 +47,9 @@ setup(
     entry_points={
         'console_scripts': [
             'moxa_change_ip = ipchange.moxa.cmd:moxa_change_ip',
-            'moxa_change_pwd = ipchange.moxa.cmd:moxa_change_pwd',
+            'moxa_change_passwd = ipchange.moxa.cmd:moxa_change_passwd',
             'axis_change_ip = ipchange.axis.cmd:axis_change_ip',
+            'axis_change_passwd = ipchange.axis.cmd:axis_change_passwd',
         ],
     },
     include_package_data=True,
