@@ -4,12 +4,10 @@ import sys
 import ipaddress
 import ipchange.moxa
 
-
-def moxa_change_ip():
-
+def moxa_base_argparser(description):
     parser = argparse.ArgumentParser(
         prog=os.path.basename(sys.argv[0]),
-        description='Change IP Addresses of MOXA Terminal Server'
+        description=description
     )
 
     parser.add_argument(
@@ -17,6 +15,23 @@ def moxa_change_ip():
         metavar='host', type=str,
         help='Address or Hostname of the MOXA to change'
     )
+
+    parser.add_argument(
+        '-u', '--username', dest='username', action='store',
+        help='Username of the MOXA to connect to',
+        default=None
+    )
+
+    parser.add_argument(
+        '-p', '--password', dest='password', action='store',
+        help='Password of the MOXA to connect to',
+        default=None
+    )
+
+    return parser
+
+def moxa_change_ip():
+    parser = moxa_base_argparser('Change IP Addresses of MOXA Terminal Server')
 
     parser.add_argument(
         'New IP Address',
@@ -36,18 +51,6 @@ def moxa_change_ip():
         help='New Gateway'
     )
 
-    parser.add_argument(
-        '-u', '--username', dest='username', action='store',
-        help='Username of the MOXA to connect to',
-        default=None
-    )
-
-    parser.add_argument(
-        '-p', '--password', dest='password', action='store',
-        help='Password of the MOXA to connect to',
-        default=None
-    )
-
     args = vars(parser.parse_args())
 
     moxa = ipchange.moxa.MoxaHTTP_2_2(
@@ -64,5 +67,37 @@ def moxa_change_ip():
         str(args['New Netmask']),
         str(args['New Gateway'])
     )
+
+    return 0
+
+
+def moxa_download():
+
+    parser = moxa_base_argparser('Download Moxa Configuration')
+
+    parser.add_argument(
+        '-o', '--output-file', dest='filename', action='store',
+        help='Name of file to dump config to',
+        default=None
+    )
+
+    args = vars(parser.parse_args())
+
+    moxa = ipchange.moxa.MoxaHTTP_2_2(
+        args['MOXA address/hostname'],
+    )
+
+    moxa.login(
+        username=args['username'],
+        password=args['password']
+    )
+
+    config = moxa.download_config()
+
+    if args['filename'] is None:
+        print(config, file=sys.stdout)
+    else:
+        with open(args['filename'], 'w') as f:
+            f.write(config)
 
     return 0

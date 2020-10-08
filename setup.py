@@ -48,6 +48,7 @@ setup(
         'console_scripts': [
             'moxa_change_ip = ipchange.moxa.cmd:moxa_change_ip',
             'moxa_change_passwd = ipchange.moxa.cmd:moxa_change_passwd',
+            'moxa_download = ipchange.moxa.cmd:moxa_download',
             'axis_change_ip = ipchange.axis.cmd:axis_change_ip',
             'axis_change_passwd = ipchange.axis.cmd:axis_change_passwd',
         ],

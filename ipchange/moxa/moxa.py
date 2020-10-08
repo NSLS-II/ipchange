@@ -47,8 +47,13 @@ class MoxaHTTP_2_2:
         self._cookies = None
         self._base_url = 'http://{}'.format(addr)
 
-    def login(self, username='admin', password=''):
+    def login(self, username, password):
         """ Login to MOXA Web Interface"""
+
+        if username is None:
+            username = 'admin'
+        if password is None:
+            password = ''
 
         r = requests.get(self._base_url)
         if r.status_code != 200:
@@ -111,3 +116,14 @@ class MoxaHTTP_2_2:
         )
         if r.status_code != 200:
             raise RuntimeError('Failed to restart MOXA, invalid response.')
+
+    def download_config(self):
+        """Download the config of the MOXA and return text"""
+        r = requests.get(
+            self._base_url + '/Config.txt',
+            cookies=self._cookies
+        )
+        if r.status_code != 200:
+            raise RuntimeError('Failed to restart MOXA, invalid response.')
+
+        return r.text
