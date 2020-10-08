@@ -98,6 +98,7 @@ class MoxaHTTP_2_2:
                    "Gateway={}&DNS1=&DNS2=&WINSDisable=0&WINSServer="
                    "&IP6Config=0&IPv6DNS1=&IPv6DNS2=&CONN_PRIORITY=0&"
                    "LAN1Speed=0&Submit=Submit&setfunc=Basic+Network")
+
         set_url = set_url.format(ipaddr, netmask, gateway)
 
         r = requests.get(self._base_url + set_url, cookies=self._cookies)
@@ -110,9 +111,3 @@ class MoxaHTTP_2_2:
         )
         if r.status_code != 200:
             raise RuntimeError('Failed to restart MOXA, invalid response.')
-
-
-if __name__ == "__main__":
-    m = MoxaHTTP_2_2('xf06bm-tsrv6')
-    m.login('admin', 'test')
-    # m.set_ipaddr('10.65.2.3', '255.255.255.0', '')

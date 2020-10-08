@@ -1,3 +1,4 @@
+import ipaddress
 import requests
 import time
 from requests.auth import HTTPDigestAuth
@@ -18,23 +19,25 @@ class AxisWebcam:
         self._base_url = 'http://{}'.format(ipaddr)
         self._auth = HTTPDigestAuth(username, password)
 
-    def set_ipaddr(self, ipaddr, netmask, gateway, broadcast):
+    def set_ipaddr(self, ipaddr, netmask, gateway):
         """Set the IP Address of the Axis Webcam
 
-        ipaddr : str 
+        ipaddr : str
             New IP Address
         netmask: str
-            New NETMASK 
+            New NETMASK
         gateway: str
             New Gateway
-        broadcast: str
-            New Broadcast Address
         """
+
+        # Use the ipaddress module to determine broadcast adddress
+        _iface = ipaddress.ip_interface('{}/{}'.format(ipaddr, netmask))
+        broadcast = _iface.network.broadcast_address
 
         # First lets get the settings page to check auth etc
 
         r = requests.get(
-            self._base_url  + '/admin/tcpip.shtml?basic=yes&id=94', 
+            self._base_url + '/admin/tcpip.shtml?basic=yes&id=94',
             auth=self._auth
         )
         if r.status_code != 200:
@@ -78,7 +81,7 @@ class AxisWebcam:
             data=data,
             headers=headers,
             allow_redirects=False
-        )    
+        )
 
         if r.status_code != 303:
             raise RuntimeError('Request to change IP failed. Bad responce.')
@@ -111,7 +114,7 @@ class AxisWebcam:
         }
 
         r = requests.get(
-            self._base_url  + '/axis-cgi/admin/pwdgrp.cgi',
+            self._base_url + '/axis-cgi/admin/pwdgrp.cgi',
             auth=self._auth,
             params=params,
             allow_redirects=False
@@ -119,9 +122,3 @@ class AxisWebcam:
 
         if r.status_code != 200:
             raise RuntimeError('Unable to connect to Axis Camera')
-
-
-if __name__ == "__main__":
-    a = AxisWebcam('10.68.41.45')
-    # a.set_ipaddr('10.68.41.45', '255.255.255.0', '10.68.41.1', '10.68.41.255')
-    a.change_passwd('root', 'pass2')
