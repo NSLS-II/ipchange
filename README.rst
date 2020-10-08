@@ -12,6 +12,9 @@ This collection of utilities provides command line utilities and python modules 
 license
 -------
 
-This software is licensed under a _3-clause BSD license_.
+This software is licensed under a __3-clause BSD license__.
 
-See (LICENSE.md) for details
+See LICENSE.md_ for details.
+
+
+.. _LICENSE.md : LICENSE.md
