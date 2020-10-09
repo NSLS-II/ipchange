@@ -240,7 +240,6 @@ class MoxaHTTP_2_2:
 
         self._print("Logged out of Moxa")
 
-
     def _get_fake_challenge(self, htmlstr):
         htmltree = lxml.html.fromstring(htmlstr)
 
