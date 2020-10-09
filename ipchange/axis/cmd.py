@@ -4,6 +4,8 @@ import sys
 import ipaddress
 import ipchange.moxa
 
+sys.tracebacklimit = 0
+
 
 def axis_base_argparser(description):
     parser = argparse.ArgumentParser(

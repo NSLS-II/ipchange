@@ -4,6 +4,8 @@ import sys
 import ipaddress
 import ipchange.moxa
 
+sys.tracebacklimit = 0
+
 
 def moxa_base_argparser(description):
     parser = argparse.ArgumentParser(
@@ -26,6 +28,12 @@ def moxa_base_argparser(description):
     parser.add_argument(
         '-p', '--password', dest='password', action='store',
         help='Password of the MOXA to connect to',
+        default=None
+    )
+
+    parser.add_argument(
+        '-c', '--cookie-file', dest='cookie_file', action='store',
+        help='File to store cookie for session information',
         default=None
     )
 
@@ -57,6 +65,7 @@ def moxa_change_ip():
 
     moxa = ipchange.moxa.MoxaHTTP_2_2(
         args['MOXA address/hostname'],
+        cookie_file=args['cookie_file']
     )
 
     moxa.login(
@@ -87,6 +96,7 @@ def moxa_download():
 
     moxa = ipchange.moxa.MoxaHTTP_2_2(
         args['MOXA address/hostname'],
+        cookie_file=args['cookie_file']
     )
 
     moxa.login(
@@ -102,4 +112,31 @@ def moxa_download():
         with open(args['filename'], 'w') as f:
             f.write(config)
 
+    moxa.logout()
+
     return 0
+
+
+def moxa_change_passwd():
+
+    parser = moxa_base_argparser('Download Moxa Configuration')
+
+    parser.add_argument(
+        'New Password',
+        metavar='passwd', type=str,
+        help='New Password'
+    )
+
+    args = vars(parser.parse_args())
+
+    moxa = ipchange.moxa.MoxaHTTP_2_2(
+        args['MOXA address/hostname'],
+        cookie_file=args['cookie_file']
+    )
+
+    moxa.login(
+        username=args['username'],
+        password=args['password']
+    )
+
+    moxa.change_passwd(args['New Password'])
