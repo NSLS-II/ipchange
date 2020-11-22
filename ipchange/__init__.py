@@ -5,3 +5,4 @@ del get_versions
 
 from .moxa.moxa import MoxaHTTP_2_2
 from .axis.axis import AxisWebcam
+from .hiden.hiden import hiden_change_ip

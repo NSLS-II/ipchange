@@ -51,6 +51,7 @@ setup(
             'moxa_download = ipchange.moxa.cmd:moxa_download',
             'axis_change_ip = ipchange.axis.cmd:axis_change_ip',
             'axis_change_passwd = ipchange.axis.cmd:axis_change_passwd',
+            'hiden_change_ip = ipchange.hiden.cmd:hiden_change_ip',
         ],
     },
     include_package_data=True,
